@@ -1,0 +1,25 @@
+Steps required to local build your own glibc-2.34 package.
+
+Pre-requisites
+My initial attempt at building the package failed due to compiler instructions defaulted for pacman. So I had to take a few extra steps to address that by installing devtools and making a local copy of the makepgk.config file:
+    pacman -S devtools
+    cp /usr/share/devtools/makepkg-x86_64.conf ~/.makepkg.conf
+
+1) All of the files in this repository were copied from clone of the current maintainer's repository (https://gihub.com/archlinux/svntogit-packages.git). Instead of cloning the maintainers respository that includes tons of other stuff, I set up this git repo to simplify things. You can start by cloning this repo ....
+    git clone https://github.com/coadmunkee/glibc_pkg_build.git
+    cd glibc_pkg_build
+2) I made changes to my version of the PKGBUILD file that include the following changes to the original form the maintainers repo (all of my line numbers are based on the original unedited file). You don't need to make these change, but I want to be transparent about what I have changed from the original.
+    line 9 - changed from pkgver=2.33 to pkgver=2.34
+    line 10 - changed from pkgrel=5 to pkgrel=1
+    line 24-27 - deleted the references to four patches assuming they should not be needed with the 2.34 sources
+    line 30 - updated the md5sum for glibc-2.33.tar.xz ('390bbd889c7e8e8a7041564cb6b27cca') to the value for glibc-2.34.tar.xz ('31998b53fb39cb946e96abc310af1c89') 
+    line 31 - replaced the 'SKIP' moniker with the md5sum for glibc-2.34.tar.xz.sig ('f60b8f5ae757e42bcdf359084f967475')
+    line 37-40 - removed the md5sum values for the patch files from lines 24-27 (don't forget to fix your closing parenthsis)
+    line 48-58 - removed the build instructions the were previously required to apply the patches from lines 24-27 
+3) In order for makepkg to run, I added one of the maintainers pgp key to my ring
+    gpg --recv-keys 16792B4EA25340F8
+5) Make sure you are still within the svntogit-packages/glibc/trunk directory and run makepkg. Be prepared to wait several minutes as this is a full rebuild of everything from the source file pulled down from gnu.org. I ran this on my Ryzen 7 5700G with 64GB memory and all files on SSD and it took almost 40 minutes to build (though I made no effort to optimize anything)
+    makepkg
+6) Assuming no errors from step 5 and everything built correctly, you can install the package by running
+    makepkg -si
+    
