@@ -19,9 +19,9 @@ After you have finished building the package, you may want to delete or rename t
     line 48-58 - removed the build instructions the were previously required to apply the patches from lines 24-27 
 3) In order for makepkg to run, I added one of the maintainers pgp keys to my ring
     gpg --recv-keys 16792B4EA25340F8
-5) Make sure you are still within the glibc_pkg_build directory and run makepkg. Be prepared to wait several minutes as this is a full rebuild of everything from the source file pulled down from gnu.org. I ran this on my Ryzen 7 5700G with 64GB memory and all files on SSD and it took almost 40 minutes to build (though I made no effort to optimize anything)
+4) Make sure you are still within the glibc_pkg_build directory and run makepkg. Be prepared to wait several minutes as this is a full rebuild of everything from the source file pulled down from gnu.org. I ran this on my Ryzen 7 5700G with 64GB memory and all files on SSD and it took almost 40 minutes to build (though I made no effort to optimize anything)
     makepkg
-6) Assuming no errors from step 5 and everything built correctly, you can install the package by running
+5) Assuming no errors from step 5 and everything built correctly, you can install the package by running
     makepkg -si
 
 Once you have installed this local package, you will see a harmless warning message every time you run 'sudo pacman -Syu' or 'yay -Syu' telling you that your local versions of glibc and lib32-glibc are newer than the core version from the repositories: 
